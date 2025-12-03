@@ -494,7 +494,7 @@ function App() {
               </motion.a>
 
               <motion.a
-                href="mailto:eurys.cc.03@gmail.com"
+                href="mailto:info@kingfantasyleague.com"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="px-8 py-3 bg-red-600 text-white font-bold rounded-full border border-red-600 hover:bg-red-700 hover:border-red-700 transition-all flex items-center space-x-3 shadow-lg shadow-red-600/20"
