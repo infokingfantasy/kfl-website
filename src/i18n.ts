@@ -43,7 +43,19 @@ const resources = {
                 labels: {
                     duration: 'Duración',
                     entry: 'Entrada',
-                    prize: 'Ganancia'
+                    prize: 'Ganancia',
+                    cost: 'Costo',
+                    total_prize: 'Premio',
+                    places: {
+                        first: '1er Lugar',
+                        second: '2do Lugar',
+                        third: '3er Lugar'
+                    }
+                },
+                tiers: {
+                    novato: 'LIGA NOVATO',
+                    pro: 'LIGA PRO',
+                    veterano: 'LIGA VETERANO'
                 }
             },
             about: {
@@ -121,7 +133,19 @@ const resources = {
                 labels: {
                     duration: 'Duration',
                     entry: 'Entry',
-                    prize: 'Prize'
+                    prize: 'Prize',
+                    cost: 'Cost',
+                    total_prize: 'Total Prize',
+                    places: {
+                        first: '1st Place',
+                        second: '2nd Place',
+                        third: '3rd Place'
+                    }
+                },
+                tiers: {
+                    novato: 'ROOKIE LEAGUE',
+                    pro: 'PRO LEAGUE',
+                    veterano: 'VETERAN LEAGUE'
                 }
             },
             about: {
@@ -199,7 +223,19 @@ const resources = {
                 labels: {
                     duration: 'Duração',
                     entry: 'Entrada',
-                    prize: 'Prêmio'
+                    prize: 'Prêmio',
+                    cost: 'Custo',
+                    total_prize: 'Prêmio Total',
+                    places: {
+                        first: '1º Lugar',
+                        second: '2º Lugar',
+                        third: '3º Lugar'
+                    }
+                },
+                tiers: {
+                    novato: 'LIGA NOVATO',
+                    pro: 'LIGA PRO',
+                    veterano: 'LIGA VETERANO'
                 }
             },
             about: {

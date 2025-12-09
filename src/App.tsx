@@ -9,6 +9,109 @@ function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('inicio');
   const [scrolled, setScrolled] = useState(false);
+  const [selectedLeague, setSelectedLeague] = useState<any>(null);
+
+  const leagues = [
+    {
+      icon: <Trophy className="w-12 h-12" />,
+      num: "01",
+      title: t('modalities.kings.title'),
+      subtitle: t('modalities.kings.subtitle'),
+      duration: t('modalities.kings.duration'),
+      entry: "USD$100 - $500",
+      prize: "USD$1,000 - $3,000",
+      desc: t('modalities.kings.desc'),
+      details: [
+        {
+          tier: t('modalities.tiers.novato'),
+          first: '60%',
+          second: '25%',
+          third: '15%',
+          totalPrize: '$1,000 USD',
+          cost: '100 USD'
+        },
+        {
+          tier: t('modalities.tiers.pro'),
+          first: '70%',
+          second: '30%',
+          totalPrize: '$2,000 USD',
+          cost: '250 USD'
+        },
+        {
+          tier: t('modalities.tiers.veterano'),
+          first: '100%',
+          totalPrize: '$3,000 USD',
+          cost: '500 USD'
+        }
+      ]
+    },
+    {
+      icon: <Calendar className="w-12 h-12" />,
+      num: "02",
+      title: t('modalities.premier.title'),
+      subtitle: t('modalities.premier.subtitle'),
+      duration: t('modalities.premier.duration'),
+      entry: "USD$50 - $150",
+      prize: "USD$500 - $1,000",
+      desc: t('modalities.premier.desc'),
+      details: [
+        {
+          tier: t('modalities.tiers.novato'),
+          first: '60%',
+          second: '25%',
+          third: '15%',
+          totalPrize: '$500 USD',
+          cost: '50 USD'
+        },
+        {
+          tier: t('modalities.tiers.pro'),
+          first: '70%',
+          second: '30%',
+          totalPrize: '$1,000 USD',
+          cost: '100 USD'
+        },
+        {
+          tier: t('modalities.tiers.veterano'),
+          first: '100%',
+          totalPrize: '$1,000 USD',
+          cost: '150 USD'
+        }
+      ]
+    },
+    {
+      icon: <Zap className="w-12 h-12" />,
+      num: "03",
+      title: t('modalities.pro.title'),
+      subtitle: t('modalities.pro.subtitle'),
+      duration: t('modalities.pro.duration'),
+      entry: "USD$10 - $100",
+      prize: "USD$100 - $700",
+      desc: t('modalities.pro.desc'),
+      details: [
+        {
+          tier: t('modalities.tiers.novato'),
+          first: '60%',
+          second: '25%',
+          third: '15%',
+          totalPrize: '$100 USD',
+          cost: '10 USD'
+        },
+        {
+          tier: t('modalities.tiers.pro'),
+          first: '60%',
+          second: '40%',
+          totalPrize: '$200 USD',
+          cost: '20 USD'
+        },
+        {
+          tier: t('modalities.tiers.veterano'),
+          first: '100%',
+          totalPrize: '$700 USD',
+          cost: '100 USD'
+        }
+      ]
+    }
+  ];
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -268,38 +371,7 @@ function App() {
             </motion.div>
 
             <div className="grid md:grid-cols-3 gap-8">
-              {[
-                {
-                  icon: <Trophy className="w-12 h-12" />,
-                  num: "01",
-                  title: t('modalities.kings.title'),
-                  subtitle: t('modalities.kings.subtitle'),
-                  duration: t('modalities.kings.duration'),
-                  entry: "USD$500",
-                  prize: "USD$3,000",
-                  desc: t('modalities.kings.desc')
-                },
-                {
-                  icon: <Calendar className="w-12 h-12" />,
-                  num: "02",
-                  title: t('modalities.premier.title'),
-                  subtitle: t('modalities.premier.subtitle'),
-                  duration: t('modalities.premier.duration'),
-                  entry: "USD$200",
-                  prize: "USD$1,500",
-                  desc: t('modalities.premier.desc')
-                },
-                {
-                  icon: <Zap className="w-12 h-12" />,
-                  num: "03",
-                  title: t('modalities.pro.title'),
-                  subtitle: t('modalities.pro.subtitle'),
-                  duration: t('modalities.pro.duration'),
-                  entry: "USD$50",
-                  prize: "USD$500",
-                  desc: t('modalities.pro.desc')
-                }
-              ].map((item, index) => (
+              {leagues.map((item, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 30 }}
@@ -307,7 +379,8 @@ function App() {
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.2 }}
                   whileHover={{ y: -10 }}
-                  className="bg-zinc-900/50 backdrop-blur-sm p-8 border border-zinc-800 hover:border-[#FE6700] transition-all duration-300 group relative overflow-hidden rounded-2xl"
+                  onClick={() => setSelectedLeague(item)}
+                  className="bg-zinc-900/50 backdrop-blur-sm p-8 border border-zinc-800 hover:border-[#FE6700] transition-all duration-300 group relative overflow-hidden rounded-2xl cursor-pointer"
                 >
                   <div className="absolute inset-0 bg-gradient-to-b from-[#FE6700]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
@@ -339,236 +412,316 @@ function App() {
                   <p className="text-zinc-400 text-sm leading-relaxed relative z-10">
                     {item.desc}
                   </p>
+
+                  <div className="mt-6 flex justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <span className="text-[#FE6700] text-sm font-bold uppercase tracking-widest border-b border-[#FE6700]">Ver Detalles</span>
+                  </div>
                 </motion.div>
               ))}
             </div>
           </div>
-        </section>
 
-        {/* Nosotros Section */}
-        <section id="nosotros" className="py-32 px-4 bg-zinc-900/30 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5"></div>
-          <div className="max-w-5xl mx-auto text-center relative z-10">
+          {/* Modal for League Details */}
+          <AnimatePresence>
+            {selectedLeague && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+                onClick={() => setSelectedLeague(null)}
+              >
+                <motion.div
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.9, opacity: 0 }}
+                  onClick={(e) => e.stopPropagation()}
+                  className="bg-[#0a0a0a] border border-[#FE6700]/30 rounded-2xl p-6 md:p-10 max-w-6xl w-full max-h-[90vh] overflow-y-auto relative shadow-[0_0_50px_rgba(254,103,0,0.15)]"
+                >
+                  <button
+                    onClick={() => setSelectedLeague(null)}
+                    className="absolute top-4 right-4 text-zinc-400 hover:text-white transition-colors"
+                  >
+                    <X className="w-8 h-8" />
+                  </button>
+
+                  <div className="text-center mb-10">
+                    <h3 className="text-4xl md:text-6xl font-black text-white uppercase italic mb-2">{selectedLeague.title}</h3>
+                    <p className="text-[#FE6700] text-xl font-bold uppercase tracking-widest">{selectedLeague.subtitle}</p>
+                  </div>
+
+                  <div className="grid md:grid-cols-3 gap-6">
+                    {selectedLeague.details.map((detail: any, index: number) => (
+                      <div key={index} className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 hover:border-[#FE6700] transition-colors group">
+                        <div className="flex items-center justify-center mb-6">
+                          <Trophy className={`w-10 h-10 ${index === 0 ? 'text-zinc-400' : index === 1 ? 'text-[#FE6700]' : 'text-yellow-500'}`} />
+                        </div>
+                        <h4 className="text-2xl font-black text-center text-white mb-6 uppercase">{detail.tier}</h4>
+
+                        <div className="space-y-3 mb-8">
+                          <div className="flex justify-between items-center py-2 border-b border-zinc-800">
+                            <span className="text-zinc-400">{t('modalities.labels.places.first')}</span>
+                            <span className="text-white font-bold">{detail.first}</span>
+                          </div>
+                          {detail.second && (
+                            <div className="flex justify-between items-center py-2 border-b border-zinc-800">
+                              <span className="text-zinc-400">{t('modalities.labels.places.second')}</span>
+                              <span className="text-white font-bold">{detail.second}</span>
+                            </div>
+                          )}
+                          {detail.third && (
+                            <div className="flex justify-between items-center py-2 border-b border-zinc-800">
+                              <span className="text-zinc-400">{t('modalities.labels.places.third')}</span>
+                              <span className="text-white font-bold">{detail.third}</span>
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="space-y-2">
+                          <div className="flex justify-between items-center">
+                            <span className="text-zinc-500 text-sm uppercase tracking-wider">{t('modalities.labels.total_prize')}</span>
+                            <span className="text-[#FE6700] font-black text-xl">{detail.totalPrize}</span>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-zinc-500 text-sm uppercase tracking-wider">{t('modalities.labels.cost')}</span>
+                            <span className="text-white font-bold">{detail.cost}</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+    </div>
+    </section >
+
+    {/* Nosotros Section */ }
+    < section id = "nosotros" className = "py-32 px-4 bg-zinc-900/30 relative overflow-hidden" >
+      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5"></div>
+      <div className="max-w-5xl mx-auto text-center relative z-10">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+        >
+          <h2 className="text-5xl md:text-7xl font-black mb-8 uppercase">
+            <span className="text-white">{t('about.title_prefix')}</span> <span className="text-[#FE6700]">{t('about.title_suffix')}</span>
+          </h2>
+          <p className="text-xl md:text-2xl text-zinc-300 leading-relaxed font-light">
+            <Trans i18nKey="about.desc">
+              Somos la evolución del fantasy deportivo. Una plataforma diseñada por gamers para gamers, donde la <span className="text-[#FE6700] font-bold">estrategia</span> se encuentra con la <span className="text-[#FE6700] font-bold">pasión</span>. Sin letras pequeñas, solo competición pura y premios reales.
+            </Trans>
+          </p>
+        </motion.div>
+      </div>
+    </section >
+
+    {/* Participar Section */ }
+    < section id = "participar" className = "py-32 px-4 bg-[#0a0a0a] relative overflow-hidden" >
+      {/* Background effects for more life */ }
+      < div className = "absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none" >
+        <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-[#FE6700] rounded-full blur-[150px] opacity-5"></div>
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#FE6700] rounded-full blur-[150px] opacity-5"></div>
+      </div >
+
+    <div className="max-w-7xl mx-auto relative z-10">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="text-center mb-20"
+      >
+        <h2 className="text-5xl md:text-7xl font-black mb-4 uppercase tracking-tighter">
+          <span className="text-white">{t('participate.title_prefix')}</span>
+          <span className="text-[#FE6700] ml-4">{t('participate.title_suffix')}</span>
+        </h2>
+        <div className="h-1 w-40 bg-[#FE6700] mx-auto shadow-[0_0_15px_#FE6700]"></div>
+      </motion.div>
+
+      <div className="grid md:grid-cols-5 gap-4">
+        {[
+          { num: '01', title: t('participate.steps.1.title'), desc: t('participate.steps.1.desc') },
+          { num: '02', title: t('participate.steps.2.title'), desc: t('participate.steps.2.desc') },
+          { num: '03', title: t('participate.steps.3.title'), desc: t('participate.steps.3.desc') },
+          { num: '04', title: t('participate.steps.4.title'), desc: t('participate.steps.4.desc') },
+          { num: '05', title: t('participate.steps.5.title'), desc: t('participate.steps.5.desc') },
+        ].map((step, index) => (
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: index * 0.1, type: "spring", stiffness: 100 }}
+            whileHover={{ scale: 1.05, y: -10 }}
+            className="relative group h-full"
+          >
+            <div className="bg-gradient-to-b from-zinc-900 to-zinc-950 h-full p-6 rounded-2xl border border-zinc-800 hover:border-[#FE6700] transition-all duration-300 shadow-lg hover:shadow-[#FE6700]/20 flex flex-col justify-between">
+              <div>
+                <div className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-br from-[#FE6700] to-zinc-800 mb-4 transition-all group-hover:scale-110 origin-left">{step.num}</div>
+                <h3 className="text-xl font-black mb-2 text-white uppercase italic group-hover:text-[#FE6700] transition-colors">{step.title}</h3>
+                <p className="text-sm text-zinc-400 group-hover:text-zinc-300 transition-colors">{step.desc}</p>
+              </div>
+              <div className="mt-4 w-full h-1 bg-zinc-800 rounded-full overflow-hidden">
+                <div className="h-full bg-[#FE6700] w-0 group-hover:w-full transition-all duration-500 ease-out"></div>
+              </div>
+            </div>
+            {index < 4 && (
+              <div className="hidden md:block absolute top-1/2 -right-6 transform -translate-y-1/2 z-10 text-zinc-800 group-hover:text-[#FE6700] transition-colors duration-300">
+                <ChevronRight className="w-8 h-8" />
+              </div>
+            )}
+          </motion.div>
+        ))}
+      </div>
+    </div>
+    </section >
+
+    {/* Testimonios Section */ }
+    < section id = "testimonios" className = "py-32 px-4 bg-zinc-900/30" >
+      <div className="max-w-7xl mx-auto">
+        <motion.h2
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="text-5xl md:text-7xl font-black text-center mb-20 uppercase text-[#FE6700]"
+        >
+          {t('testimonials.title')}
+        </motion.h2>
+
+        <div className="grid md:grid-cols-3 gap-8">
+          {[
+            { name: "Miguel R.", role: t('testimonials.1.role'), quote: t('testimonials.1.quote') },
+            { name: "Andrea S.", role: t('testimonials.2.role'), quote: t('testimonials.2.quote') },
+            { name: "Carlos P.", role: t('testimonials.3.role'), quote: t('testimonials.3.quote') }
+          ].map((item, index) => (
             <motion.div
+              key={index}
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
+              transition={{ delay: index * 0.2 }}
+              className="bg-[#0a0a0a] p-8 border border-zinc-800 relative group hover:-translate-y-2 transition-transform duration-300 rounded-xl"
             >
-              <h2 className="text-5xl md:text-7xl font-black mb-8 uppercase">
-                <span className="text-white">{t('about.title_prefix')}</span> <span className="text-[#FE6700]">{t('about.title_suffix')}</span>
-              </h2>
-              <p className="text-xl md:text-2xl text-zinc-300 leading-relaxed font-light">
-                <Trans i18nKey="about.desc">
-                  Somos la evolución del fantasy deportivo. Una plataforma diseñada por gamers para gamers, donde la <span className="text-[#FE6700] font-bold">estrategia</span> se encuentra con la <span className="text-[#FE6700] font-bold">pasión</span>. Sin letras pequeñas, solo competición pura y premios reales.
-                </Trans>
-              </p>
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#FE6700] to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 rounded-t-xl"></div>
+              <div className="flex items-center mb-6">
+                <div className="w-12 h-12 bg-[#FE6700] rounded-full flex items-center justify-center text-white font-black text-xl">
+                  <span>{item.name.charAt(0)}</span>
+                </div>
+                <div className="ml-4">
+                  <h4 className="font-bold text-white text-lg">{item.name}</h4>
+                  <p className="text-xs text-[#FE6700] uppercase tracking-wider">{item.role}</p>
+                </div>
+              </div>
+              <p className="text-zinc-400 italic">"{item.quote}"</p>
             </motion.div>
-          </div>
-        </section>
+          ))}
+        </div>
+      </div>
+    </section >
 
-        {/* Participar Section */}
-        <section id="participar" className="py-32 px-4 bg-[#0a0a0a] relative overflow-hidden">
-          {/* Background effects for more life */}
-          <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-            <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-[#FE6700] rounded-full blur-[150px] opacity-5"></div>
-            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#FE6700] rounded-full blur-[150px] opacity-5"></div>
-          </div>
+    {/* Soporte Section */ }
+    < section id = "soporte" className = "py-32 px-4 relative overflow-hidden" >
+      <div className="absolute inset-0 bg-gradient-to-t from-[#FE6700]/10 to-transparent"></div>
+      <div className="max-w-4xl mx-auto text-center relative z-10">
+        <h2 className="text-5xl md:text-7xl font-black mb-8 uppercase">
+          <span className="text-white">{t('support.title_prefix')}</span> <span className="text-[#FE6700]">{t('support.title_suffix')}</span>
+        </h2>
+        <p className="text-xl text-zinc-300 mb-12">
+          {t('support.desc')}
+        </p>
 
-          <div className="max-w-7xl mx-auto relative z-10">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-center mb-20"
+        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+          <motion.a
+            href="https://discord.gg/xPnFxZ2k"
+            target="_blank"
+            rel="noopener noreferrer"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="px-8 py-3 bg-[#5865F2] text-white font-bold rounded-full hover:bg-[#4752C4] transition-all flex items-center space-x-3 shadow-lg shadow-[#5865F2]/20"
+          >
+            <MessageCircle className="w-6 h-6" />
+            <span>{t('support.discord_btn')}</span>
+          </motion.a>
+
+          <motion.a
+            href="mailto:info@kingfantasyleague.com"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="px-8 py-3 bg-red-600 text-white font-bold rounded-full border border-red-600 hover:bg-red-700 hover:border-red-700 transition-all flex items-center space-x-3 shadow-lg shadow-red-600/20"
+          >
+            <Mail className="w-6 h-6" />
+            <span>{t('support.email_btn')}</span>
+          </motion.a>
+        </div>
+      </div>
+    </section >
+  </main >
+
+    <footer className="bg-black border-t border-zinc-900 py-12 px-4">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-8">
+          <div className="flex items-center space-x-3 mb-4 md:mb-0">
+            <img
+              src="/kfl-logo-icon.png"
+              alt="KFL Crown"
+              className="w-8 h-8 object-contain grayscale hover:grayscale-0 transition-all"
+            />
+            <span className="text-xl font-black tracking-tighter text-zinc-500 hover:text-white transition-colors">KFL</span>
+          </div>
+          <p className="text-zinc-600 text-sm font-medium">
+            {t('footer.rights')}
+          </p>
+        </div>
+
+        {/* Download Buttons Section */}
+        <div className="border-t border-zinc-900 pt-8">
+          <p className="text-center text-zinc-500 text-xs font-bold uppercase tracking-widest mb-4">
+            {t('footer.downloads')}
+          </p>
+          <div className="flex flex-wrap justify-center gap-3">
+            <motion.a
+              href="https://www.espn.com/fantasy/football/"
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-3 py-1.5 bg-[#DA020E] text-white text-[10px] font-bold rounded-full border border-[#DA020E] hover:bg-[#b50109] transition-all flex items-center space-x-1.5 shadow-lg shadow-[#DA020E]/20"
             >
-              <h2 className="text-5xl md:text-7xl font-black mb-4 uppercase tracking-tighter">
-                <span className="text-white">{t('participate.title_prefix')}</span>
-                <span className="text-[#FE6700] ml-4">{t('participate.title_suffix')}</span>
-              </h2>
-              <div className="h-1 w-40 bg-[#FE6700] mx-auto shadow-[0_0_15px_#FE6700]"></div>
-            </motion.div>
+              <img src="/espn-logo.png" alt="ESPN" className="w-3 h-3 object-contain" />
+              <span>ESPN Fantasy</span>
+            </motion.a>
 
-            <div className="grid md:grid-cols-5 gap-4">
-              {[
-                { num: '01', title: t('participate.steps.1.title'), desc: t('participate.steps.1.desc') },
-                { num: '02', title: t('participate.steps.2.title'), desc: t('participate.steps.2.desc') },
-                { num: '03', title: t('participate.steps.3.title'), desc: t('participate.steps.3.desc') },
-                { num: '04', title: t('participate.steps.4.title'), desc: t('participate.steps.4.desc') },
-                { num: '05', title: t('participate.steps.5.title'), desc: t('participate.steps.5.desc') },
-              ].map((step, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1, type: "spring", stiffness: 100 }}
-                  whileHover={{ scale: 1.05, y: -10 }}
-                  className="relative group h-full"
-                >
-                  <div className="bg-gradient-to-b from-zinc-900 to-zinc-950 h-full p-6 rounded-2xl border border-zinc-800 hover:border-[#FE6700] transition-all duration-300 shadow-lg hover:shadow-[#FE6700]/20 flex flex-col justify-between">
-                    <div>
-                      <div className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-br from-[#FE6700] to-zinc-800 mb-4 transition-all group-hover:scale-110 origin-left">{step.num}</div>
-                      <h3 className="text-xl font-black mb-2 text-white uppercase italic group-hover:text-[#FE6700] transition-colors">{step.title}</h3>
-                      <p className="text-sm text-zinc-400 group-hover:text-zinc-300 transition-colors">{step.desc}</p>
-                    </div>
-                    <div className="mt-4 w-full h-1 bg-zinc-800 rounded-full overflow-hidden">
-                      <div className="h-full bg-[#FE6700] w-0 group-hover:w-full transition-all duration-500 ease-out"></div>
-                    </div>
-                  </div>
-                  {index < 4 && (
-                    <div className="hidden md:block absolute top-1/2 -right-6 transform -translate-y-1/2 z-10 text-zinc-800 group-hover:text-[#FE6700] transition-colors duration-300">
-                      <ChevronRight className="w-8 h-8" />
-                    </div>
-                  )}
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Testimonios Section */}
-        <section id="testimonios" className="py-32 px-4 bg-zinc-900/30">
-          <div className="max-w-7xl mx-auto">
-            <motion.h2
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              className="text-5xl md:text-7xl font-black text-center mb-20 uppercase text-[#FE6700]"
+            <motion.a
+              href="https://www.fantrax.com/fantasy/league/yo8e3xu4mi5z0ekw/home"
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-3 py-1.5 bg-[#0066CC] text-white text-[10px] font-bold rounded-full border border-[#0066CC] hover:bg-[#0052a3] transition-all flex items-center space-x-1.5 shadow-lg shadow-[#0066CC]/20"
             >
-              {t('testimonials.title')}
-            </motion.h2>
+              <img src="/fantrax-logo.png" alt="Fantrax" className="w-3 h-3 object-contain" />
+              <span>Fantrax</span>
+            </motion.a>
 
-            <div className="grid md:grid-cols-3 gap-8">
-              {[
-                { name: "Miguel R.", role: t('testimonials.1.role'), quote: t('testimonials.1.quote') },
-                { name: "Andrea S.", role: t('testimonials.2.role'), quote: t('testimonials.2.quote') },
-                { name: "Carlos P.", role: t('testimonials.3.role'), quote: t('testimonials.3.quote') }
-              ].map((item, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.2 }}
-                  className="bg-[#0a0a0a] p-8 border border-zinc-800 relative group hover:-translate-y-2 transition-transform duration-300 rounded-xl"
-                >
-                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#FE6700] to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 rounded-t-xl"></div>
-                  <div className="flex items-center mb-6">
-                    <div className="w-12 h-12 bg-[#FE6700] rounded-full flex items-center justify-center text-white font-black text-xl">
-                      <span>{item.name.charAt(0)}</span>
-                    </div>
-                    <div className="ml-4">
-                      <h4 className="font-bold text-white text-lg">{item.name}</h4>
-                      <p className="text-xs text-[#FE6700] uppercase tracking-wider">{item.role}</p>
-                    </div>
-                  </div>
-                  <p className="text-zinc-400 italic">"{item.quote}"</p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Soporte Section */}
-        <section id="soporte" className="py-32 px-4 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-t from-[#FE6700]/10 to-transparent"></div>
-          <div className="max-w-4xl mx-auto text-center relative z-10">
-            <h2 className="text-5xl md:text-7xl font-black mb-8 uppercase">
-              <span className="text-white">{t('support.title_prefix')}</span> <span className="text-[#FE6700]">{t('support.title_suffix')}</span>
-            </h2>
-            <p className="text-xl text-zinc-300 mb-12">
-              {t('support.desc')}
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-              <motion.a
-                href="https://discord.gg/xPnFxZ2k"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-8 py-3 bg-[#5865F2] text-white font-bold rounded-full hover:bg-[#4752C4] transition-all flex items-center space-x-3 shadow-lg shadow-[#5865F2]/20"
-              >
-                <MessageCircle className="w-6 h-6" />
-                <span>{t('support.discord_btn')}</span>
-              </motion.a>
-
-              <motion.a
-                href="mailto:info@kingfantasyleague.com"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-8 py-3 bg-red-600 text-white font-bold rounded-full border border-red-600 hover:bg-red-700 hover:border-red-700 transition-all flex items-center space-x-3 shadow-lg shadow-red-600/20"
-              >
-                <Mail className="w-6 h-6" />
-                <span>{t('support.email_btn')}</span>
-              </motion.a>
-            </div>
-          </div>
-        </section>
-      </main>
-
-      <footer className="bg-black border-t border-zinc-900 py-12 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-center mb-8">
-            <div className="flex items-center space-x-3 mb-4 md:mb-0">
-              <img
-                src="/kfl-logo-icon.png"
-                alt="KFL Crown"
-                className="w-8 h-8 object-contain grayscale hover:grayscale-0 transition-all"
-              />
-              <span className="text-xl font-black tracking-tighter text-zinc-500 hover:text-white transition-colors">KFL</span>
-            </div>
-            <p className="text-zinc-600 text-sm font-medium">
-              {t('footer.rights')}
-            </p>
-          </div>
-
-          {/* Download Buttons Section */}
-          <div className="border-t border-zinc-900 pt-8">
-            <p className="text-center text-zinc-500 text-xs font-bold uppercase tracking-widest mb-4">
-              {t('footer.downloads')}
-            </p>
-            <div className="flex flex-wrap justify-center gap-3">
-              <motion.a
-                href="https://www.espn.com/fantasy/football/"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-3 py-1.5 bg-[#DA020E] text-white text-[10px] font-bold rounded-full border border-[#DA020E] hover:bg-[#b50109] transition-all flex items-center space-x-1.5 shadow-lg shadow-[#DA020E]/20"
-              >
-                <img src="/espn-logo.png" alt="ESPN" className="w-3 h-3 object-contain" />
-                <span>ESPN Fantasy</span>
-              </motion.a>
-
-              <motion.a
-                href="https://www.fantrax.com/fantasy/league/yo8e3xu4mi5z0ekw/home"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-3 py-1.5 bg-[#0066CC] text-white text-[10px] font-bold rounded-full border border-[#0066CC] hover:bg-[#0052a3] transition-all flex items-center space-x-1.5 shadow-lg shadow-[#0066CC]/20"
-              >
-                <img src="/fantrax-logo.png" alt="Fantrax" className="w-3 h-3 object-contain" />
-                <span>Fantrax</span>
-              </motion.a>
-
-              <motion.a
-                href="https://discord.com/download"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-3 py-1.5 bg-[#5865F2] text-white text-[10px] font-bold rounded-full border border-[#5865F2] hover:bg-[#4752C4] transition-all flex items-center space-x-1.5 shadow-lg shadow-[#5865F2]/20"
-              >
-                <img src="/discord-logo.png" alt="Discord" className="w-3 h-3 object-contain" />
-                <span>Discord</span>
-              </motion.a>
-            </div>
+            <motion.a
+              href="https://discord.com/download"
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-3 py-1.5 bg-[#5865F2] text-white text-[10px] font-bold rounded-full border border-[#5865F2] hover:bg-[#4752C4] transition-all flex items-center space-x-1.5 shadow-lg shadow-[#5865F2]/20"
+            >
+              <img src="/discord-logo.png" alt="Discord" className="w-3 h-3 object-contain" />
+              <span>Discord</span>
+            </motion.a>
           </div>
         </div>
-      </footer>
-    </div>
+      </div>
+    </footer>
+    </div >
   );
 }
 
