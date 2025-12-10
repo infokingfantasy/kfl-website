@@ -40,6 +40,343 @@
 <body>
   <div id="root"></div>
   <script type="module" src="/src/main.tsx"></script>
+  <!-- 
+  KFL Virtual Assistant Widget
+  Instrucciones:
+  1. Copia este código.
+  2. Pégalo en tu sitio web antes de la etiqueta </body>.
+  3. Asegúrate de que tu bot esté desplegado en Fly.io.
+-->
+  <div id="kfl-chat-widget">
+    <!-- Botón flotante -->
+    <button id="kfl-chat-toggle" aria-label="Abrir chat con asistente">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+      </svg>
+    </button>
+    <!-- Ventana de chat -->
+    <div id="kfl-chat-window" class="hidden">
+      <div class="kfl-chat-header">
+        <div class="kfl-header-title">
+          <span>Asistente KFL</span>
+          <span class="kfl-status-dot"></span>
+        </div>
+        <button id="kfl-chat-close">&times;</button>
+      </div>
+
+      <div id="kfl-chat-messages">
+        <div class="kfl-message assistant">
+          Hola 👋 Soy el asistente virtual de la King Fantasy League. ¿En qué puedo ayudarte hoy?
+        </div>
+      </div>
+
+      <div class="kfl-chat-input-area">
+        <input type="text" id="kfl-chat-input" placeholder="Escribe tu pregunta..." />
+        <button id="kfl-chat-send">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  <style>
+    /* Estilos del Widget */
+    :root {
+      --kfl-primary: #e62429;
+      /* Red KFL */
+      --kfl-dark: #1a1a1a;
+      --kfl-text: #ffffff;
+      --kfl-bg: #2d2d2d;
+    }
+
+    #kfl-chat-widget {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 9999;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    #kfl-chat-toggle {
+      background-color: var(--kfl-primary);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #kfl-chat-toggle:hover {
+      transform: scale(1.1);
+    }
+
+    #kfl-chat-window {
+      position: absolute;
+      bottom: 80px;
+      right: 0;
+      width: 350px;
+      height: 500px;
+      background-color: var(--kfl-dark);
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      border: 1px solid #333;
+    }
+
+    #kfl-chat-window.hidden {
+      display: none;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .kfl-chat-header {
+      background-color: var(--kfl-primary);
+      color: white;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+    }
+
+    .kfl-header-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .kfl-status-dot {
+      width: 8px;
+      height: 8px;
+      background-color: #4ade80;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    #kfl-chat-close {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 0;
+      line-height: 1;
+    }
+
+    #kfl-chat-messages {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+      background-color: #121212;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .kfl-message {
+      max-width: 80%;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .kfl-message.assistant {
+      background-color: #333;
+      color: #eee;
+      align-self: flex-start;
+      border-bottom-left-radius: 2px;
+    }
+
+    .kfl-message.user {
+      background-color: var(--kfl-primary);
+      color: white;
+      align-self: flex-end;
+      border-bottom-right-radius: 2px;
+    }
+
+    .kfl-message.error {
+      background-color: #441a1a;
+      color: #ffcccc;
+      align-self: center;
+      font-size: 12px;
+    }
+
+    .kfl-loading span {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background-color: #888;
+      border-radius: 50%;
+      margin: 0 2px;
+      animation: bounce 1.4s infinite ease-in-out both;
+    }
+
+    .kfl-loading span:nth-child(1) {
+      animation-delay: -0.32s;
+    }
+
+    .kfl-loading span:nth-child(2) {
+      animation-delay: -0.16s;
+    }
+
+    @keyframes bounce {
+
+      0%,
+      80%,
+      100% {
+        transform: scale(0);
+      }
+
+      40% {
+        transform: scale(1);
+      }
+    }
+
+    .kfl-chat-input-area {
+      padding: 15px;
+      background-color: #1a1a1a;
+      border-top: 1px solid #333;
+      display: flex;
+      gap: 10px;
+    }
+
+    #kfl-chat-input {
+      flex: 1;
+      background-color: #2d2d2d;
+      border: 1px solid #444;
+      border-radius: 20px;
+      padding: 10px 16px;
+      color: white;
+      outline: none;
+    }
+
+    #kfl-chat-input:focus {
+      border-color: var(--kfl-primary);
+    }
+
+    #kfl-chat-send {
+      background: var(--kfl-primary);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.2s;
+    }
+
+    #kfl-chat-send:disabled {
+      background: #555;
+      cursor: not-allowed;
+    }
+  </style>
+  <script>
+    (function () {
+      // CONFIGURACIÓN: Reemplaza esto con la URL de tu bot
+      // Ej: https://kfl-discord-bot.fly.dev
+      const BOT_API_URL = 'https://kfl-discord-bot.fly.dev';
+
+      const widget = document.getElementById('kfl-chat-widget');
+      const toggleBtn = document.getElementById('kfl-chat-toggle');
+      const windowEl = document.getElementById('kfl-chat-window');
+      const closeBtn = document.getElementById('kfl-chat-close');
+      const inputEl = document.getElementById('kfl-chat-input');
+      const sendBtn = document.getElementById('kfl-chat-send');
+      const messagesEl = document.getElementById('kfl-chat-messages');
+      // Generar un ID de usuario aleatorio para esta sesión
+      const userId = 'web-' + Math.random().toString(36).substr(2, 9);
+      // Toggle ventana
+      toggleBtn.addEventListener('click', () => {
+        windowEl.classList.toggle('hidden');
+        if (!windowEl.classList.contains('hidden')) {
+          inputEl.focus();
+        }
+      });
+      closeBtn.addEventListener('click', () => {
+        windowEl.classList.add('hidden');
+      });
+      // Enviar mensaje
+      async function sendMessage() {
+        const text = inputEl.value.trim();
+        if (!text) return;
+        // Agregar mensaje usuario
+        addMessage(text, 'user');
+        inputEl.value = '';
+        sendBtn.disabled = true;
+        // Indicador de escribiendo
+        const loadingId = addLoading();
+        try {
+          const response = await fetch(`${BOT_API_URL}/api/chat`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: text, userId: userId })
+          });
+          if (!response.ok) throw new Error('Error de conexión');
+          const data = await response.json();
+
+          // Remover loading y agregar respuesta
+          removeMessage(loadingId);
+          addMessage(data.response, 'assistant');
+        } catch (error) {
+          console.error(error);
+          removeMessage(loadingId);
+          addMessage('Lo siento, hubo un problema al conectar con el servidor.', 'error');
+        } finally {
+          sendBtn.disabled = false;
+          inputEl.focus(); // Mantener foco para escribir seguido
+          scrollToBottom();
+        }
+      }
+      sendBtn.addEventListener('click', sendMessage);
+      inputEl.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendMessage();
+      });
+      function addMessage(text, type) {
+        const div = document.createElement('div');
+        div.className = `kfl-message ${type}`;
+        // Procesar saltos de línea básicos
+        div.innerHTML = text.replace(/\n/g, '<br>');
+        messagesEl.appendChild(div);
+        scrollToBottom();
+        return div.id = 'msg-' + Date.now();
+      }
+      function addLoading() {
+        const div = document.createElement('div');
+        div.className = 'kfl-message assistant kfl-loading';
+        div.innerHTML = '<span></span><span></span><span></span>';
+        const id = 'loading-' + Date.now();
+        div.id = id;
+        messagesEl.appendChild(div);
+        scrollToBottom();
+        return id;
+      }
+      function removeMessage(id) {
+        const el = document.getElementById(id);
+        if (el) el.remove();
+      }
+
+      function scrollToBottom() {
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+      }
+    })();
+  </script>
 </body>
 
 </html>
